@@ -1,0 +1,1 @@
+set DEBUG=express.test.app & npm start

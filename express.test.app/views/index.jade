@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to the #{title} test application 
+
+  p status is #{status}
+  
+  div.inputbox
+    form(name="submitAction", action="/submitAction", method="get")
+      p Enter number of seconds to wait on backend:
+      input(type="text", name="waitSeconds")
+      p submit http request
+      input(type="submit", value="submitAction")
+
+//  input (type="text" action="/")
+  
+//  button(class="btn", data-action="bea") Awsome

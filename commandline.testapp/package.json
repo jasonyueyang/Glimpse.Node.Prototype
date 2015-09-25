@@ -1,0 +1,10 @@
+{
+  "name": "commandline.testApp",
+  "version": "0.0.0",
+  "private": true,
+
+  "dependencies": {
+    "node-uuid": "~1.4.3",
+    "http": "" 
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "glimpse.core",
+  "version": "0.0.0",
+  "private": true,
+
+  "dependencies": {
+    "node-uuid": "~1.4.3",
+    "http": "",
+    "util": "~0.10.3",
+    "useragent": "~2.1.7"
+  }
+}
