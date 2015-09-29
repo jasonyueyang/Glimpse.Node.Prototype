@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Create New Product</title>
+    <link rel="stylesheet" href="/styles/sails.test.app.css"/>
+  </head>
+  <body>
+
+    <div>
+
+        <h1>
+          Product Details for product <%= product.id %>
+        </h1>
+        <table>
+	          <tr>
+                <td>Id:</td>
+                <td> <%= product.id %></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td><%= product.name %></td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><%= product.price %></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><%= product.description %></td>
+            </tr>
+        </table>
+
+
+    </div>
+
+  </body>
+</html>

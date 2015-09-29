@@ -1,0 +1,40 @@
+.navPane {
+	text-align: left;
+	color: black;
+	border-style: none;
+	border-width: 2px;
+	background-color: #58D3F7;
+	
+}
+
+.headerPane {
+	
+	text-align: left;
+	color: black;
+	border-style: none;
+	border-width: 2px;
+	background-color: #58D3F7;
+}
+
+.mainBody {
+	text-align: left;
+	color: black;
+	border-style: none;
+	border-width: 2px;
+	background-color: white;
+}
+
+h1 {
+	text-align: left;
+	font-size: 30px;
+}
+
+h2 {
+	text-align: left;
+	font-size: 25px;
+}
+
+h3 {
+	text-align: left;
+	font-size: 25px;
+}
