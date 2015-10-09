@@ -88,7 +88,7 @@ function userIDMessage(context, userId, userName, email, image) {
 
     var types = ["user-identification"];
 
-    var message = createMessage(data, null, types, context);
+    var message = createMessage(data, {}, types, context);
     return message;
 }
 
