@@ -2,11 +2,6 @@ var http = require('http');
 var uuid = require('node-uuid');
 var util = require('util');
 
-function Context() {
-    this.id = uuid.v4();
-    this.Type = "Request"
-}
-
 var getNextOrdinal = (function () {
     var i = 0;
 
@@ -20,9 +15,9 @@ function createMessage(data, indices, types, context) {
     message.id = uuid.v4();
     message.context = context;
     message.ordinal = getNextOrdinal();
-
     message.types = types;
     message.indices = indices;
+    
     var payloadObject = {
         id: message.id,
         payload: data,
@@ -30,44 +25,41 @@ function createMessage(data, indices, types, context) {
         context: message.context,
         types: types
     };
+    
     message.payload = JSON.stringify(payloadObject);
 
-
     return message;
-
 }
 
-function beginRequestMessage(context, hostUrl) {
+function beginRequestMessage(context, requestData) {
 
-    var data = { url: hostUrl };
-    var indices = { "request-url": hostUrl }
+    var data = { url: requestData.url };
+    var indices = { "request-url": requestData.url }
     var types = ["begin-request-message"];
-
     var message = createMessage(data, indices, types, context);
     return message;
 }
 
-function endRequestMessage(context, hostUrl, beginTime, endTime) {
-
-    var duration = endTime.getTime() - beginTime.getTime();
+function endRequestMessage(context, requestData) {
+    var duration = requestData.endTime.getTime() - requestData.startTime.getTime();
 
     var data = {
         duration: duration,
-        startTime: beginTime,
-        endTime: endTime,
-        url: hostUrl,
-        method: "GET",
-        contentType: "text/html; charset=utf-8",
-        statusCode: 200
+        startTime: requestData.startTime,
+        endTime: requestData.endTime,
+        url: requestData.url,
+        method: requestData.method,
+        contentType: requestData.contentType,
+        statusCode: requestData.statusCode
     };
 
     var indices = {
         "request-duration": duration,
-        "request-datetime": beginTime,
-        "request-url": hostUrl,
-        "request-method": "GET",
-        "request-content-type": "text/html; charset=utf-8",
-        "request-status-code": 200
+        "request-datetime": requestData.startTime,
+        "request-url": requestData.url,
+        "request-method": requestData.Method,
+        "request-content-type": requestData.contentType,
+        "request-status-code": requestData.statusCode
     };
 
     var types = ["end-request-message"];
@@ -87,8 +79,26 @@ function userIDMessage(context, userId, userName, email, image) {
     };
 
     var types = ["user-identification"];
+    var indices = {};
 
-    var message = createMessage(data, {}, types, context);
+    var message = createMessage(data, indices, types, context);
+    return message;
+}
+
+function actionRouteMessage(context, action, route) {
+    var data = {
+        actionId: action.id,
+        actionName: action.name,
+        actionDisplayName: action.displayName,
+        actionControllerName: action.controllerName,
+        routeName: route.name,
+        routePattern: route.pattern,
+        routeData: route.data,
+    };
+        
+    var types = ['action-route'];
+    var indices = {};
+    var message = createMessage(data, indices, types, context);
     return message;
 }
 
@@ -105,7 +115,7 @@ function GlimpseAgent() {
 
         var str = '';
         var callback = function (response) {
-            console.log("GlimpseAgent:  callback started");
+
             response.on('data', function (chunk) {
                 str += chunk;
             });
@@ -124,26 +134,20 @@ function GlimpseAgent() {
 
         var req = http.request(options, callback);
 
-        console.log("calling write");
         var json = JSON.stringify(messages);
 
-        console.log(json);
-
         req.write(json);
-        console.log("calling end");
         req.end();
-
-        console.log("DONE!")
     }
 }
 
 
 var glimpseMessages = {
     GlimpseAgent: GlimpseAgent,
-    Context: Context,
     beginRequestMessage: beginRequestMessage,
     endRequestMessage: endRequestMessage,
-    userIDMessage: userIDMessage
+    userIDMessage: userIDMessage,
+    actionRouteMessage: actionRouteMessage
 };
 
 module.exports = glimpseMessages;
