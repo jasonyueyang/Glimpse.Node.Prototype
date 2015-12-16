@@ -49,15 +49,27 @@ var beginRequest = function(requestData, callback) {
           startTime: glimpseSession.getStartTime(),
           endTime: new Date(),
           method: requestData.request.method,
-          contentLength: 0,
+          contentLength: null, 
           contentType: null,  
           statusCode: requestData.response.statusCode,
           headers: requestData.response._headers,
         };
         
-        if ( requestData.response._contentLength  && requestData.response._contentLength > 0) {
+        
+        // set content length if available
+        if ( requestData.response._headers && requestData.response._headers['content-length']) {
             messageData.contentLength = requestData.response._headers['content-length'];
+        }
+        
+        // set content type if available
+        if ( requestData.response._headers && requestData.response._headers['content-type']) {
             messageData.contentType = requestData.response._headers['content-type'];
+        }
+        else if ( requestData.response.statusCode === 304) {
+            // hack for 304 so the messages show up in Glimpse UI.  This needs to get fixed on the UI end without us having
+            // to set the content type here.  The UI is filtering out "noisy" messages based on teh content type, so if 
+            // we don't set this, then messages don't show up. 
+            messageData.contentType = 'text/html';
         }
         
         var message = glimpseMessages.endRequestMessage(context, messageData);

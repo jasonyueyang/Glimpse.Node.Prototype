@@ -9,8 +9,11 @@ router.get('/', function(req, res, next) {
 function submitAction(req, res, next) {
    setTimeout( 
        function() {
-           res.render('index', { title: 'Glimpse for Express', status: "Thanks for submitting!  You're request waited for " + req.query.waitSeconds + " seconds!" }); },
-        req.query.waitSeconds * 1000);
+           res.render( 'index', { 
+                     title: 'Glimpse for Express', 
+                     status: "Thanks for submitting!  You're request waited for " + req.query.waitSeconds + " seconds!" })
+       },
+       req.query.waitSeconds * 1000);
 }
 
 router.get('/submitAction', submitAction);
