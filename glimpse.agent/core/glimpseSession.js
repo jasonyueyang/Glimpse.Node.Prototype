@@ -6,7 +6,8 @@ var keyContext = 'context';
 var keyStartTime = 'start-time';
 
 function Context() {
-    this.id = uuid.v4();
+    // strip dashes out of the guid (cause that's what glimpse server & client expects)
+    this.id = uuid.v4().replace(new RegExp('-', 'g'), '');
     this.Type = "Request"
 }
 

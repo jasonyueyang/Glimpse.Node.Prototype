@@ -12,7 +12,8 @@ var getNextOrdinal = (function () {
 
 function createMessage(data, indices, types, context) {
     var message = {};
-    message.id = uuid.v4();
+    // strip dashes out of the guid (cause that's what glimpse server and client expects)
+    message.id = uuid.v4().replace(new RegExp('-', 'g'), '');
     message.context = context;
     message.ordinal = getNextOrdinal();
     message.types = types;
@@ -33,9 +34,20 @@ function createMessage(data, indices, types, context) {
 
 function beginRequestMessage(context, requestData) {
 
-    var data = { url: requestData.url };
+    var data = 
+    { 
+        requestUrl: requestData.url,
+        requestContentLength: requestData.contentLength,
+        requestContentType: requestData.contentType,
+        requestHeaders: requestData.headers,
+        requestIsAjax: requestData.isAjax,
+        requestMethod: requestData.method,
+        requestPath: requestData.path,
+        requestQueryString: requestData.queryString,
+        requestStartTime: requestData.startTime
+     };
     var indices = { "request-url": requestData.url }
-    var types = ["begin-request-message"];
+    var types = ["begin-request"];
     var message = createMessage(data, indices, types, context);
     return message;
 }
@@ -44,13 +56,15 @@ function endRequestMessage(context, requestData) {
     var duration = requestData.endTime.getTime() - requestData.startTime.getTime();
 
     var data = {
-        duration: duration,
-        startTime: requestData.startTime,
-        endTime: requestData.endTime,
-        url: requestData.url,
-        method: requestData.method,
-        contentType: requestData.contentType,
-        statusCode: requestData.statusCode
+        requestUrl: requestData.url,
+        requestPath: requestData.path, 
+        requestQueryString: requestData.queryString, 
+        responseContentLength: requestData.contentLength,
+        responseContentType: requestData.contentType,
+        responseStatusCode: requestData.statusCode,
+        responseHeaders: requestData.headers,
+        responseDuration:duration,
+        responseEndTime:requestData.endTime        
     };
 
     var indices = {
@@ -62,7 +76,7 @@ function endRequestMessage(context, requestData) {
         "request-status-code": requestData.statusCode
     };
 
-    var types = ["end-request-message"];
+    var types = ["end-request"];
 
 
     var message = createMessage(data, indices, types, context);
@@ -127,12 +141,13 @@ function GlimpseAgent() {
 
         var options = {
             host: 'localhost',
-            path: '/glimpse/AgentMessage',
+            path: '/glimpse/message-ingress',
             port: 5000,
             method: 'POST'
         };
 
         var req = http.request(options, callback);
+        req.setHeader('Content-Type', 'application/json');
 
         var json = JSON.stringify(messages);
 
