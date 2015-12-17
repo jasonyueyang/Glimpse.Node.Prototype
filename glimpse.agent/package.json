@@ -2,12 +2,11 @@
   "name": "glimpse.core",
   "version": "0.0.0",
   "private": true,
-
   "dependencies": {
+    "continuation-local-storage": "3.1.4",
     "node-uuid": "~1.4.3",
-    "http": "",
-    "util": "~0.10.3",
+    "request": "^2.67.0",
     "useragent": "~2.1.7",
-    "continuation-local-storage":"3.1.4"
+    "util": "~0.10.3"
   }
 }

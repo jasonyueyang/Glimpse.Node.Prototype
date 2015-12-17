@@ -1,4 +1,5 @@
-var glimpse = require('../glimpse.agent/express/glimpseExpress.js');
+var glimpse = require('../glimpse.agent/express/glimpseExpress.js')();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');

@@ -4,8 +4,7 @@ var glimpseCore = require("../core/glimpseMiddleware.js");
 var interceptor = require('../core/moduleInterceptor.js');
 var glimpseSession = require('../core/glimpseSession.js');
 var glimpseRuntime = require('../core/glimpseRuntime.js');
-
-interceptor.intercept('express', interceptExpress);
+var glimpseOptions = require('../core/glimpseOptions');
 
 function interceptExpress (express) {
     var expressWrapper = function () {
@@ -54,4 +53,11 @@ function interceptExpress (express) {
     return expressWrapper;
 }
 
-module.exports = {};
+exports = module.exports = function(options) {
+
+    if (options !== undefined && options.metadataUri !== undefined) {
+        glimpseOptions.metadataUri = options.metadataUri;
+    }
+    
+    interceptor.intercept('express', interceptExpress);    
+};

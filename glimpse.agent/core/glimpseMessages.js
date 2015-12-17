@@ -1,6 +1,8 @@
-var http = require('http');
 var uuid = require('node-uuid');
+var request = require('request');
 var util = require('util');
+
+var glimpseMetadata = require('./glimpseMetadata');
 
 var getNextOrdinal = (function () {
     var i = 0;
@@ -127,32 +129,21 @@ function GlimpseAgent() {
             messages = [messages];
         }
 
-        var str = '';
-        var callback = function (response) {
+        glimpseMetadata.getMetadataForResource('message-ingress', function(err, metadata) {
+            if (err) return err;
+            
+            var options = 
+            {
+                uri: metadata,
+                method: 'POST',
+                json: true,
+                body: messages
+            };
 
-            response.on('data', function (chunk) {
-                str += chunk;
-            });
-
-            response.on('end', function () {
-                console.log("GlimpseAgent:  end:  " + str);
-            });
-        }
-
-        var options = {
-            host: 'localhost',
-            path: '/glimpse/message-ingress',
-            port: 5000,
-            method: 'POST'
-        };
-
-        var req = http.request(options, callback);
-        req.setHeader('Content-Type', 'application/json');
-
-        var json = JSON.stringify(messages);
-
-        req.write(json);
-        req.end();
+            request(options, function(err, res) {
+                console.log('GlimpseAgent:  end: ' + res.statusMessage);                
+            });            
+        });
     }
 }
 
