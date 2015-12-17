@@ -12,18 +12,22 @@ Clone this repository.
 
 ##Use
 
-Run the server application.
+Run the server test application.
 
 ```javascript
 > cd Glimpse.Node.Prototype/glimpse.server
 > npm install
+> cd ../express.server.test.app
+> npm install
 > npm start
 ```
 
-In another window, run the client sample application.
+In another window, run the client test application.
 
 ```javascript
-> cd Glimpse.Node.Prototype/express.test.app
+> cd Glimpse.Node.Prototype/glimpse.agent
+> npm install
+> cd ../express.test.app
 > npm install
 > npm start
 ```
