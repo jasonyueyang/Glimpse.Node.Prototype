@@ -14,7 +14,6 @@
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "node-uuid": "~1.4.3",
-    "http": "",
     "util": "~0.10.3",
     "useragent": "~2.1.7"
   }
