@@ -28,11 +28,11 @@ In another window, run the client sample application.
 > npm start
 ```
 
-Open a browser to http://localhost:3000/.
+Open a browser to [http://localhost:3000/](http://localhost:3000/).
 
 Click around the page and you'll generate some messages stored by the server.
 
-View the messages by opening a browser to http://localhost:5000/ and clicking ['Launch Client'](http://localhost:5000/glimpse/client/index.html?metadataUri=%2Fglimpse%2Fmetadata).
+View the messages by opening a browser to [http://localhost:5000/glimpse](http://localhost:5000/glimpse) and clicking ['Launch Client'](http://localhost:5000/glimpse/client/index.html?metadataUri=%2Fglimpse%2Fmetadata).
 
 ##License
 
