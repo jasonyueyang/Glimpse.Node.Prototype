@@ -1,15 +1,16 @@
 var _ = require('lodash');
 
 var hash = require('./hash');
-var messageStore = require('./messageStore');
+var messageService = require('./messageService');
+
 
 var addMessages = function (messages) {
-    messageStore.addMessages(messages);
+    messageService.addMessages(messages);
 };
 
 var getMessagePayloads = function (requestId, types) {
 
-    var messages = messageStore.getMessages(requestId, types);
+    var messages = messageService.getMessages(requestId, types);
 
     var payloads =
       '[' +
@@ -29,6 +30,7 @@ var getMetadata = function (baseUrl) {
     {
         'message-history': baseUrl + '/message-history/?types={types}',
         'message-ingress': baseUrl + '/message-ingress/',
+        'message-stream': baseUrl + '/message-stream/{?types, contextId}',
         'metadata': baseUrl + '/metadata/?hash={hash}'
     };
 
@@ -43,6 +45,22 @@ var getMetadata = function (baseUrl) {
     return metadata;
 };
 
+var streamMessagePayloads = function (types, contextId, callback) {
+    return messageService.streamMessages(types, contextId, function (err, message) {
+        if (err) return callback(err);
+
+        var payload = '';
+
+        payload += 'id: ' + message.context.id + '\n';
+        payload += 'event: ' + 'message' + '\n';
+        payload += 'data: ' + '[' + message.payload + ']' + '\n';
+        payload += '\n';
+
+        callback(null, payload);
+    });
+};
+
 exports.addMessages = addMessages;
 exports.getMetadata = getMetadata;
 exports.getMessagePayloads = getMessagePayloads;
+exports.streamMessagePayloads = streamMessagePayloads;

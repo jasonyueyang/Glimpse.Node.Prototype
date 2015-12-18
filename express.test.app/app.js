@@ -1,8 +1,5 @@
-var glimpse = require('../glimpse.agent/express/glimpseExpress.js')(
-    {
-        embedServer: true
-    }
-);
+
+var glimpse = require('../glimpse.agent/express/glimpseExpress.js')({ embedServer: true });
 
 var express = require('express');
 var path = require('path');
