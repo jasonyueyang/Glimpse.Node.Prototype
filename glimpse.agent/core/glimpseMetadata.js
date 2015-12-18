@@ -15,7 +15,7 @@ var getMetadataFromServer = function(callback) {
 
 			var options =
 			{
-				uri: glimpseOptions.metadataUri,
+				uri: glimpseOptions.metadataUri(),
 				json: true
 			};	
 			

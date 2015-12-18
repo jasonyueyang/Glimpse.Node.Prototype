@@ -1,5 +1,12 @@
-exports = module.exports = 
+exports = module.exports =
 {
-	embedServer: false,
-	metadataUri: 'http://localhost:5000/glimpse/metadata'	
+    embedServer: false,
+    protocol: 'http',
+    host: 'localhost:5000',
+    baseUri: function () {
+        return this.protocol + '://' + this.host;
+    },
+    metadataUri: function () {
+        return this.baseUri() + '/glimpse/metadata';
+    }
 };
