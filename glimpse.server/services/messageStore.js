@@ -9,11 +9,16 @@ var addMessages = function(messages) {
 };
 
 var getMessagesByType = function(types) {
-	return _.filter(
-		_messages,
-		function(message) {
-			return _.intersection(message.types, types).length > 0;
-		});
+	if (types !== undefined && types.length > 0) {
+		return _.filter(
+			_messages,
+			function(message) {
+				return _.intersection(message.types, types).length > 0;
+			});	
+	}
+	else {
+		return _messages;
+	}
 };
 
 exports.addMessages = addMessages;
