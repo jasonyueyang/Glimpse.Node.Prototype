@@ -6,9 +6,23 @@ var glimpseSession = require('../core/glimpseSession.js');
 var glimpseRuntime = require('../core/glimpseRuntime.js');
 var glimpseOptions = require('../core/glimpseOptions');
 
+var glimpseServer = require('../../glimpse.server');
+
 function interceptExpress (express) {
     var expressWrapper = function () {
         var app = express.apply(this, arguments);
+
+        if (glimpseOptions.embedServer) {            
+            app.use(glimpseServer.express());
+            
+            app.use(function(req, res, next){
+               if (glimpseOptions.metadataUri === undefined) {
+                   glimpseOptions.metadataUri = req.protocol + '://' + req.get('host') + '/glimpse/metadata';
+               }
+               
+               next();
+            });
+        }
 
         app.use(function(req, res, next) {
            glimpseCore.glimpseSessionInit(req, res, next);  
@@ -55,8 +69,19 @@ function interceptExpress (express) {
 
 exports = module.exports = function(options) {
 
-    if (options !== undefined && options.metadataUri !== undefined) {
-        glimpseOptions.metadataUri = options.metadataUri;
+    if (options !== undefined) {
+        if (options.embedServer !== undefined && options.embedServer) {
+            glimpseOptions.embedServer = options.embedServer;
+            
+            // NOTE: When embedded, the metadata URI will be updated upon the first request 
+            //       (to obtain the correct hostname and port). 
+            
+            glimpseOptions.metadataUri = undefined;
+        }
+               
+        if (options.metadataUri !== undefined) {
+            glimpseOptions.metadataUri = options.metadataUri;
+        }
     }
     
     interceptor.intercept('express', interceptExpress);    

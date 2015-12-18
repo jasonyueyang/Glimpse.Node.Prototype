@@ -1,3 +1,4 @@
+var bodyParser = require('body-parser');
 var express = require('express');
 var router = express.Router();
 
@@ -21,7 +22,7 @@ router.get('/message-history', function(req, res) {
   res.send(payloads);
 });
 
-router.post('/message-ingress', function(req, res) {
+router.post('/message-ingress', bodyParser.json(), function(req, res) {
   glimpseService.addMessages(req.body);
   
   res.sendStatus(200);
