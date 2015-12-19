@@ -12,22 +12,46 @@ Clone this repository.
 
 ##Use
 
+The server can run standalone or be "embedded" within an existing application.
+
+###Embedded (Recommended)
+
 Run the server test application.
 
+In another window, run the client test application.  Ensure that the glimpse require statement in `app.js` does not contain `embedServer: true`.
+
 ```javascript
-> cd Glimpse.Node.Prototype/glimpse.server
+> cd Glimpse.Node.Prototype/src/glimpse.server
 > npm install
-> cd ../express.server.test.app
+> cd ../glimpse.agent
+> npm install
+> cd ../samples/express.test.app
 > npm install
 > npm start
 ```
 
-In another window, run the client test application.
+Open a browser to [http://localhost:3000/](http://localhost:3000/).
+
+Click around the page and you'll generate some messages stored by the server.
+
+###Standalone
+
+Run the server test application.
+
+```javascript
+> cd Glimpse.Node.Prototype/src/glimpse.server
+> npm install
+> cd ../samples/express.server.test.app
+> npm install
+> npm start
+```
+
+In another window, run the client test application.  Note: ensure that the glimpse require statement in `app.js` does not contain `embedServer: true`.  That is, the property should either be not set or set to false.
 
 ```javascript
 > cd Glimpse.Node.Prototype/glimpse.agent
 > npm install
-> cd ../express.test.app
+> cd ../samples/express.test.app
 > npm install
 > npm start
 ```

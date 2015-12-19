@@ -5,10 +5,29 @@
 			"name": "Launch Client",
 			"type": "node",
 			"request": "launch",
-			"program": "./express.test.app/bin/www",
+			"program": "./samples/express.test.app/bin/www",
 			"stopOnEntry": false,
 			"args": [],
-			"cwd": "./express.test.app",
+			"cwd": "./samples/express.test.app",
+			"runtimeExecutable": null,
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"externalConsole": false,
+			"sourceMaps": false,
+			"outDir": null
+		},
+		{
+			"name": "Launch Server",
+			"type": "node",
+			"request": "launch",
+			"program": "./samples/express.server.test.app/bin/www",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": "./samples/express.server.test.app",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
 				"--nolazy"
