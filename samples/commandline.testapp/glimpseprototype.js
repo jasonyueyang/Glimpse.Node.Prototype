@@ -1,6 +1,6 @@
 var http = require('http');
 var uuid = require ('node-uuid'); 
-var glimpse = require('../glimpse.agent/core/glimpseMessages.js')
+var glimpse = require('../../src/glimpse.agent/core/glimpseMessages.js')
 
 
 var readline = require('readline');
