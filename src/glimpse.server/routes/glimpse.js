@@ -7,7 +7,7 @@ var router = express.Router();
 var glimpseService = require('../services/glimpseService');
 
 router.use(logger('dev'));
-router.use(bodyParser.json());
+router.use(bodyParser.json({ type: [ 'application/json', 'application/x-www-form-urlencoded' ] }));
 router.use('/', express.static(path.join(__dirname, '../resources/root')));
 router.use('/client', express.static(path.join(__dirname, '../resources/client')));
 router.use('/hud', express.static(path.join(__dirname, '../resources/hud')));
