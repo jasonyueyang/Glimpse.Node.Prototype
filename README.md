@@ -1,20 +1,27 @@
 #Welcome to Glimpse for Node.js!
 
 ## What is Glimpse?
-This is a prototype for a [Glimpse](http://getglimpse.com/) project for the node.js development stack.  Glimpse is a .net request-level debugging tool that is is intended to provide real-time
-diagnostics & insights.  
+This is a prototype for a [Glimpse](http://getglimpse.com/) implementation for the node.js development stack.  Glimpse is a request-level debugging tool that is is intended to 
+provide real-time diagnostics & insights.  It was originally authored for .net, and we'd like to bring a similiar offering to the Node.js community.  
 
 ## Why Glimpse for Node?
 Glimpse is quite popular amongst .net developers, and we're exploring what it means to bring analogous functionality to Node.js. 
 
 ## Getting Started
 *Very Rough Instructions*: 
-At this time, you need to run the .net Glimpse.V2 prototype.  We're working to eliminate this dependency. 
 
-1. Clone the [Glimpse V2 git repository](https://github.com/Glimpse/Glimpse.Prototype). 
+1. We're currently running Node version 5.3.0.  If you encounter problems on other versions of Node, please open an issue.    
 2. Clone the [Glimpse Node.js prototype](https://github.com/Glimpse/Glimpse.Node.Prototype).
-3. Open the Glimpse.sln file in Visual Studio 2015 & run the solution by typing "f5".  
-4. cd to Glimpse.Node.Prototype/express.test.app and run "npm start"
+3. Run npm install in the following directories:
+  * <root>\src\glimpse.agent
+  * <root>\src\glimpse.server 
+  * <root>\samples\express.test.app
+4. cd to Glimpse.Node.Prototype/express.test.app and run "node ./bin/www"
 5. Open the express app in your browser at [http://localhost:3000/](http://localhost:3000/). 
 6. Click around the page, and you'll generate some messages that will get stored in the .net server.
-7. View the message history by going to [http://localhost:5000/glimpse/MessageHistory](http://localhost:5000/glimpse/MessageHistory)
+7. Note the Glimpse *Heads Up Display* (HUD) that appears in the bottom of your browser window. 
+8. Point your browser at [http://localhost:3000/glimpse/client/index.html](http://localhost:3000/glimpse/client/index.html) to see all requests. 
+9.  Click on each request to see its details.
+10. Click on [http://localhost:3000/glimpse/message-history/?types=begin-request,end-request](http://localhost:3000/glimpse/message-history/?types=begin-request,end-request) 
+to see the raw message history in json format.    
+
