@@ -66,17 +66,18 @@ function interceptExpress(express) {
     };
 
     var expressSend = expressWrapper['response'].send;
-    expressWrapper['response'].send = function send(body) {
-
+    expressWrapper['response'].send = function send(body) { 
         // at time this method is called, we're invoked on a "Response" object. 
-        var response = this;
-
-        var payload = glimpseRuntime.getHUDScriptTags();
-
-        if (typeof body === 'string') {
+        var res = this;
+        
+        // TODO: this should be an extension point 
+        // TODO: should ignore if not text/html, etc
+        if (typeof body === 'string' && res.req.baseUrl != '/glimpse') {
+            var payload = glimpseRuntime.getHUDScriptTags();
             body = glimpseRuntime.injectScript(body, payload);
         }
-        expressSend.apply(response, arguments);
+        
+        expressSend.apply(res, arguments);
     }
 
     return expressWrapper;
