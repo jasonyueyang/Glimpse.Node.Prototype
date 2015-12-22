@@ -28,6 +28,7 @@ var getMessagePayloads = function (requestId, types) {
 var getMetadata = function (baseUrl) {
     var resources =
     {
+        'context': baseUrl + '/context/?contextId={contextId}{&types}',
         'message-history': baseUrl + '/message-history/?types={types}',
         'message-ingress': baseUrl + '/message-ingress/',
         'message-stream': baseUrl + '/message-stream/{?types, contextId}',
