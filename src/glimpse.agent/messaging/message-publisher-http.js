@@ -1,5 +1,5 @@
 var request = require('request');
-var metadataProvider = ('../configuration/metadata-provider');
+var metadataProvider = require('../configuration/metadata-provider');
 
 var publishMessage = function(messages) {
     metadataProvider.getResourceOptions(function(metadata) {
