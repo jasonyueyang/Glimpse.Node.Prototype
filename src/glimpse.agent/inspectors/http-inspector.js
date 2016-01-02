@@ -43,6 +43,13 @@ var init = (function() {
             responseDuration: null,
             responseEndTime: new Date(),
         };
+        if (res.statusCode === 304) {
+            // TODO: hack for 304 so the messages show up in Glimpse UI.  This needs to 
+            //       get fixed on the UI end without us having to set the content type 
+            //       here.  The UI is filtering out "noisy" messages based on teh content 
+            //       type, so if we don't set this, then messages don't show up. 
+            data.contentType = 'text/html';
+        }
         var indices = {
             "request-duration": data.responseDuration,
             "request-content-type": data.responseContentType,
