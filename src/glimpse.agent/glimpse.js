@@ -16,6 +16,6 @@ module.exports = function() {
     // register interceptor
     for (var inspectorIndex in inspectors) {
         var inspectorKey = inspectors[inspectorIndex];
-        interceptor.regsiter(inspectorKey, require('./inspectors/' + inspectorKey + '-inspector').init)
+        interceptor.regsiter(inspectorKey, require('./inspectors/' + inspectorKey + '-proxy').init)
     }
 };

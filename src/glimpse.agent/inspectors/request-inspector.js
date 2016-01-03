@@ -2,7 +2,7 @@
 
 var httpHelper = require('./util/http-helper');
 
-var init = (function() {
+var inspector = (function() {
     var broker = null;
     
     var onBeginRequest = function(req, res) {
@@ -60,32 +60,15 @@ var init = (function() {
         broker.sendMessage(data, null, types, indices);
     };
     
-    var setup = function(agent, http) {
+    var init = function(agent) {
         broker = agent.broker;
-        
-        // proxy `http.createServer`
-        var oldCreateServer = http.createServer;
-        http.createServer = function(callback) { 
-            return oldCreateServer(function(req, res) {
-                onBeginRequest(req, res);
-                
-                callback.apply(this, arguments);
-                
-                res.on('finish', function() {
-                    onEndRequest(req, res);
-                });
-            });
-        };
     };
     
-    return function(agent, http) {
-        setup(agent, http);
-        
-        return http;
+    return {
+        init: init,
+        before: onBeginRequest,
+        after: onEndRequest
     }; 
 })();
 
-
-module.exports = {
-    init: init
-};
+module.exports = inspector;
