@@ -1,7 +1,8 @@
 'use strict';
 
 var interceptorKeys = [
-    'request'
+    'request',
+    'user'
 ];
 
 var proxy = (function() {
