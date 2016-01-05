@@ -1,6 +1,8 @@
 'use strict';
 
 var parse = require('parseurl');
+var cookie = require('cookie');
+var merge = require('utils-merge');
 
 var request = {
     header: function(req, name) {
@@ -58,9 +60,51 @@ var request = {
         var index = host.indexOf(':', offset);
 
         return index !== -1 ? host.substring(0, index) : host;
+    },
+    parseCookies: function(req) {
+        var result = request.header(req, 'cookie');
+        
+        return result ? cookie.parse(result) : null;
     }
-}
+};
+
+var response = {
+    appendHeader: function(res, field, val) {
+        var prev = res.getHeader(res, field);
+        var value = val;
+
+        if (prev) {
+            // concat the new and prev vals
+            value = Array.isArray(prev) ? prev.concat(val)
+                : Array.isArray(val) ? [prev].concat(val)
+                : [prev, val];
+        }
+
+        return res.setHeader(field, value);
+    },
+    setCookie: function(res, name, value, options) {
+        var opts = merge({}, options);
+        
+        if ('maxAge' in opts) {
+            opts.expires = new Date(Date.now() + opts.maxAge);
+            opts.maxAge /= 1000;
+        }
+        if (opts.path == null) {
+            opts.path = '/';
+        }
+
+        response.appendHeader(res, 'Set-Cookie', cookie.serialize(name, String(value), opts));
+
+        return this;
+    },
+    clearCookie: function(res, name, options) {
+        var opts = merge({ expires: new Date(1), path: '/' }, options);
+
+        return response.setCookie(res, name, '', opts);
+    }
+};
 
 module.exports = {
-    request: request
-}
+    request: request,
+    response: response
+};
