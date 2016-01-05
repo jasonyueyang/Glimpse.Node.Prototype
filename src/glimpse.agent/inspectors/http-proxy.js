@@ -5,7 +5,7 @@ var interceptorKeys = [
 ];
 
 var proxy = (function() {
-    var broker = null;
+    var agent = null;
     var interceptors = [];
     
     var requestEvent = function(key, req, res) {
@@ -30,12 +30,16 @@ var proxy = (function() {
     };
     var setupInspectors = function() {
         for (var i = 0; i < interceptorKeys.length; i++) {
-            interceptors.push(require('./' + interceptorKeys[i] + '-inspector'));
+            var inspector = require('./' + interceptorKeys[i] + '-inspector');
+            
+            inspector.init(agent);
+            
+            interceptors.push(inspector);
         }
     };
     
-    var init = function(agent, http) {
-        broker = agent.broker;
+    var init = function(ctx, http) {
+        agent = ctx;
         
         setupProxy(http);
         setupInspectors();
