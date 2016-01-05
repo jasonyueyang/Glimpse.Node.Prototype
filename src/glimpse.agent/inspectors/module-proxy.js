@@ -1,11 +1,12 @@
 'use strict';
 
+var inspectors = [
+    'http',
+    'express'
+];
+
 var proxyProvider = (function() {
     var interceptions = {};
-    
-    var regsiter = function(id, interceptFunc) {
-        interceptions[id] = interceptFunc;
-    };
     
     var setupProxy = function(agent, Module) {
         var moduleRequire = Module.prototype.require;
@@ -27,13 +28,20 @@ var proxyProvider = (function() {
         Module.prototype.require = glimpseRequire;
     };
     
+    var setupProxies = function() {
+        for (var inspectorIndex in inspectors) {
+            var inspectorKey = inspectors[inspectorIndex];
+            interceptions[inspectorKey] = require('./' + inspectorKey + '-proxy').init;
+        }
+    };
+    
     var init = function(agent, Module) {
         setupProxy(agent, Module);
+        setupProxies();
     };
     
     return {
-        init: init,
-        regsiter: regsiter
+        init: init
     }
 })();
 
