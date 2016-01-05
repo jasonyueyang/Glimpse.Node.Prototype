@@ -1,5 +1,5 @@
-var interceptor = require('./platform/module-interceptor');
-var broker = require('./messaging/agent-broker')
+var moduleProxy = require('./inspectors/module-proxy');
+var agentBroker = require('./messaging/agent-broker')
 
 var inspectors = [
     'http'
@@ -7,15 +7,15 @@ var inspectors = [
 
 module.exports = function() {
     var agent = {
-        broker: broker
+        broker: agentBroker
     };
     
     // setup interceptor
-    interceptor.init(agent);
+    moduleProxy.init(agent, require('module'));
     
     // register interceptor
     for (var inspectorIndex in inspectors) {
         var inspectorKey = inspectors[inspectorIndex];
-        interceptor.regsiter(inspectorKey, require('./inspectors/' + inspectorKey + '-proxy').init)
+        moduleProxy.regsiter(inspectorKey, require('./inspectors/' + inspectorKey + '-proxy').init)
     }
 };

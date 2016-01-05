@@ -1,9 +1,13 @@
-var Module = require('module');
+'use strict';
 
 var proxyProvider = (function() {
     var interceptions = {};
     
-    var init = function(agent) {
+    var regsiter = function(id, interceptFunc) {
+        interceptions[id] = interceptFunc;
+    };
+    
+    var setupProxy = function(agent, Module) {
         var moduleRequire = Module.prototype.require;
         
         var glimpseRequire = function(id) {
@@ -22,8 +26,9 @@ var proxyProvider = (function() {
         
         Module.prototype.require = glimpseRequire;
     };
-    var regsiter = function(id, interceptFunc) {
-        interceptions[id] = interceptFunc;
+    
+    var init = function(agent, Module) {
+        setupProxy(agent, Module);
     };
     
     return {
