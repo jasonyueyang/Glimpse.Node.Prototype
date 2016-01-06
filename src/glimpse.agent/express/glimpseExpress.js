@@ -61,7 +61,7 @@ function interceptExpress(express) {
             data: {} /* TODO */
         };
 
-        glimpseRuntime.dispatchRoute(actionData, routeData);
+        glimpseRuntime.dispatchRoute(req.glimpse, actionData, routeData);
         expressDispatch.apply(route, arguments);
     };
 
@@ -73,7 +73,7 @@ function interceptExpress(express) {
         // TODO: this should be an extension point 
         // TODO: should ignore if not text/html, etc
         if (typeof body === 'string' && res.req.baseUrl != '/glimpse') {
-            var payload = glimpseRuntime.getHUDScriptTags();
+            var payload = glimpseRuntime.getHUDScriptTags(res.req.glimpse);
             body = glimpseRuntime.injectScript(body, payload);
         }
         

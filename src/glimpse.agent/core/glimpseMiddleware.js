@@ -10,46 +10,47 @@ var glimpseSession = require('./glimpseSession.js');
 // config.tabs.push(reqResTab);
 
 function glimpseSessionInit(req, res, next) {
-    glimpseSession.init(next);
+    if (!req.glimpse) {
+
+        glimpseSession.init(req, res, function (session) {
+            req.glimpse = session;
+            
+            next();
+        });       
+    }
+    else {
+        next();
+    }    
 }
 
 function glimpseMiddleware(req, res, next) {    
 
-    res.end = bindResponseEnd(req, res);
-
-    runtime.beginRequest({
-        request: req,
-        response: res
-    }, function (err) {
-        if (err) {
-            // TODO, hopefully this doesn't break
-            // but we should still call next if it does
-        }
+    if (!req.glimpse.middlewareAttached) {
         
-        next();
-    });
-}
+        req.glimpse.middlewareAttached = true;
 
-function bindResponseEnd(req, res) {
-    var resEnd = res.end;
-    function glimpseResEnd(data, encoding, callback) {
-        var that = this;
-        //var endArgs = Array.prototype.slice.call(arguments, 2);
-
-        runtime.endRequest({
-            request: req,
-            response: res
-        }, function (err) {
-            if (err) {
-                // TODO, hopefully this doesn't break
-                // but we should still call next if it does
-            }
-            
-            resEnd.call(that, data, encoding, callback);
+        res.on('finish', function () {
+            runtime.endRequest(
+                {
+                    request: req,
+                    response: res
+                }, 
+                function (err) {
+                });       
         });
+        
+        runtime.beginRequest(
+            {
+                request: req,
+                response: res
+            }, 
+            function (err) {            
+                next();
+            });
     }
-
-    return glimpseResEnd;
+    else {
+        next();
+    }
 }
 
 module.exports = { glimpseMiddleware, glimpseSessionInit };

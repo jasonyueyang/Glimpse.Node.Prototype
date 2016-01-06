@@ -10,7 +10,7 @@ var beginRequest = function (requestData, callback) {
     var glimpseAgent = new glimpseMessages.GlimpseAgent();
 
     // TODO - correctly create the user ID message
-    var context = glimpseSession.getContext();
+    var context = requestData.request.glimpse.context;
     var messageData = {
         url: requestData.request.originalUrl,
         contentLength: null,
@@ -20,7 +20,7 @@ var beginRequest = function (requestData, callback) {
         method: requestData.request.method,
         path: requestData.request.path,
         queryString: requestData.request.originalUrl.substring(requestData.request.path.length),
-        startTime: glimpseSession.getStartTime()
+        startTime: requestData.request.glimpse.startTime
     };
 
     if (requestData.request.Method == 'POST') {
@@ -50,12 +50,12 @@ var beginRequest = function (requestData, callback) {
         callback();
 
         var glimpseAgent = new glimpseMessages.GlimpseAgent();
-        var context = glimpseSession.getContext();
+        var context = requestData.request.glimpse.context;
         var messageData = {
             url: requestData.request.originalUrl,
             path: requestData.request.path,
             queryString: requestData.request.originalUrl.substring(requestData.request.path.length),
-            startTime: glimpseSession.getStartTime(),
+            startTime: requestData.request.glimpse.startTime,
             endTime: new Date(),
             method: requestData.request.method,
             contentLength: null,
@@ -93,18 +93,17 @@ var beginRequest = function (requestData, callback) {
          return htmlbody;
      },
 
-    dispatchRoute = function (action, route) {
+    dispatchRoute = function (session, action, route) {
 
-        var context = glimpseSession.getContext();
-        var message = glimpseMessages.actionRouteMessage(context, action, route);
+        var message = glimpseMessages.actionRouteMessage(session.context, action, route);
         var glimpseAgent = new glimpseMessages.GlimpseAgent();
         glimpseAgent.send(message);
     },
 
-    getHUDScriptTags = function () {
+    getHUDScriptTags = function (requestData) {
 
         var payload = null;
-        var context = glimpseSession.getContext();
+        var context = requestData.context;
         if (context) {
             var hudFormat = '\r\n' +
             '<script src="%s/glimpse/hud/hud.js?hash=%s" ' +

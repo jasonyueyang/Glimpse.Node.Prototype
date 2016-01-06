@@ -5,38 +5,43 @@ var glimpseNamespace = 'glimpse-session';
 var keyContext = 'context';
 var keyStartTime = 'start-time';
 
+var ns = cls.createNamespace(glimpseNamespace);
+
 function Context() {
     // strip dashes out of the guid (cause that's what glimpse server & client expects)
     this.id = uuid.v4().replace(new RegExp('-', 'g'), '');
     this.type = "Request"
 }
 
-function init(next) {
-    var session = cls.createNamespace(glimpseNamespace);
-    session.run( function() {
-        session.set(keyContext, new Context());
-        session.set(keyStartTime, new Date());
-        next() } );
-}
+function init(req, res, next) {
+    var session =
+    {
+        context: new Context(),
+        startTime: new Date()
+    }        
+        
+    ns.bindEmitter(req);
+    ns.bindEmitter(res);
 
-function getContinuationLocalStorage() {
-    var session = cls.getNamespace(glimpseNamespace);
-    return session;    
+    ns.run( 
+        function() {        
+            ns.set(keyContext, session.context);
+            ns.set(keyStartTime, session.startTime);
+                            
+            next(session);
+        });
 }
 
 function getContext() {
-    var session = cls.getNamespace(glimpseNamespace);
-    return session.get(keyContext);   
+    return ns.get(keyContext);   
 }
 
 function getStartTime() {
-    var session = cls.getNamespace(glimpseNamespace);
-    return session.get(keyStartTime);   
+    return ns.get(keyStartTime);   
 }
 
 var glimpseSession = {
     init: init,
-    getContinuationLocalStorage: getContinuationLocalStorage,
     getContext: getContext,
     getStartTime: getStartTime
 };
