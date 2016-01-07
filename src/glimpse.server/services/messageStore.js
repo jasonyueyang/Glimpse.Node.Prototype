@@ -14,23 +14,23 @@ var getMessages = function (requestId, types) {
     if (!requestId && !types) {
         return _messages;
     }
-    else {
-        return _.filter(
-            _messages,
-            function (message) {
-                if (requestId && types) {
-                    return message.context.id == requestId && _.intersection(message.types, types).length > 0;
-                }
-                else if (requestId) {
-                    return message.context.id == requestId;
-                }
-                else if (types) {
-                    return _.intersection(message.types, types).length > 0;
-                }
-            });
-    }
-};
 
+    return _.filter(
+        _messages,
+        function (message) {
+            if (requestId && types) {
+                return message.context.id == requestId && _.intersection(message.types, types).length > 0;
+            }
+
+            if (requestId) {
+                return message.context.id == requestId;
+            }
+
+            if (types) {
+                return _.intersection(message.types, types).length > 0;
+            }
+        });
+};
 
 exports.addMessages = addMessages;
 exports.getMessages = getMessages;
