@@ -6,7 +6,7 @@ var _subscriptions = [ ];
 var addMessages = function(messages) {
     messageStore.addMessages(messages);
 
-    // NOTE: We copy the array in case subscriptions are removed during the callback.    
+    // NOTE: We copy the array in case subscriptions are removed during the callback.
 
     var subscriptions = _subscriptions.slice();
     
@@ -47,7 +47,7 @@ var streamMessages = function(types, contextId, callback) {
     entry.done = function() {
         var index = _subscriptions.indexOf(entry);
         
-        if (index >= 0) {        
+        if (index >= 0) {
             _subscriptions.splice(index, 1);
         }
     };
