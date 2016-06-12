@@ -2,7 +2,7 @@
 
 ## What is Glimpse?
 This is a prototype for a [Glimpse](http://getglimpse.com/) implementation for the node.js development stack.  Glimpse is a request-level debugging tool that is is intended to 
-provide real-time diagnostics & insights.  It was originally authored for .net, and we'd like to bring a similiar offering to the Node.js community.  
+provide real-time diagnostics & insights.  It was originally authored for .net, and we'd like to bring a similar offering to the Node.js community.  
 
 ## Why Glimpse for Node?
 Glimpse is quite popular amongst .net developers, and we're exploring what it means to bring analogous functionality to Node.js. 
